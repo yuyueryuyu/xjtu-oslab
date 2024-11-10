@@ -10,8 +10,8 @@ void* add() {
     printf("thread1 created success!\n"); 
     for (int i = 0; i < 10000; i++) {
         sem_wait(&signal);
-	shared++;
-	sem_post(&signal);
+	    shared++;
+	    sem_post(&signal);
     }
     return NULL;
 }
@@ -20,7 +20,7 @@ void* sub() {
     printf("thread2 created success!\n"); 
     for (int i = 0; i < 10000; i++) {
         sem_wait(&signal);                                                                      
-	shared--;
+	    shared--;
         sem_post(&signal); 
     }
     return NULL;
