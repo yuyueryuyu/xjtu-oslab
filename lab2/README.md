@@ -1746,6 +1746,7 @@ Page Fault Rate: 60.00%
 
 ### 分析：
 对于这个测试数据：
+```shell
 1 2 3 1 2   //局部区域1构建
 4           //局部区域外
 1 5 2 1 5   //局部区域1测试+局部区域2构建
@@ -1753,9 +1754,11 @@ Page Fault Rate: 60.00%
 1           //局部区域2测试
 3           //局部区域外
 5           //局部区域2测试
+```
 
 假设内存帧数为3，
 FIFO的情况：
+```shell
 Page 1 -> In Frame 1 : X -> 1 ; 1 X X (Page Fault)
 Page 2 -> In Frame 2 : X -> 2 ; 1 2 X (Page Fault)
 Page 3 -> In Frame 3 : X -> 3 ; 1 2 3 (Page Fault)
@@ -1771,10 +1774,12 @@ Page 4 -> In Frame 2 : 1 -> 4 ; 2 4 5 (Page Fault)
 Page 1 -> In Frame 3 : 5 -> 1 ; 2 4 1 (Page Fault)
 Page 3 -> In Frame 1 : 2 -> 3 ; 3 4 1 (Page Fault)
 Page 5 -> In Frame 2 : 4 -> 5 ; 3 5 1 (Page Fault)
+```
 注意到访问Page 4时按照FIFO原则将1进行置换，但局部性较好的程序中，1由于在刚刚被访问，很有可能在接下来被访问。
 FIFO算法进行了置换，则在接下来访问1的时候又会产生页错误，缺页率较高。
 
 LRU的情况：
+```shell
 Page 1 -> In Frame 1 : X -> 1 ; 1 X X (Page Fault)
 Page 2 -> In Frame 2 : X -> 2 ; 1 2 X (Page Fault)
 Page 3 -> In Frame 3 : X -> 3 ; 1 2 3 (Page Fault)
@@ -1790,6 +1795,7 @@ Page 4 -> In Frame 3 : 2 -> 4 ; 1 5 4 (Page Fault)
 Page 1 -> No page fault
 Page 3 -> In Frame 2 : 5 -> 3 ; 1 3 4 (Page Fault)
 Page 5 -> In Frame 3 : 4 -> 5 ; 1 3 5 (Page Fault)
+```
 对于同样的数据，访问Page 4的时候按照LRU原则选择了3进行置换，这样随后访问1的时候就不会缺页，缺页率较低。
 
 ## 问题：
@@ -1808,6 +1814,7 @@ Page 5 -> In Frame 3 : 4 -> 5 ; 1 3 5 (Page Fault)
 3. 使用内存紧缩。
 可以在内存紧张的时候，使用内存紧缩算法，压缩内存空间。
 4. 设计合理的垃圾回收机制。
-可以采用Mark-Sweep（标记清除算法）、Stop-Copy（停止复制算法）、Reference-Counting（引用计数算法）等算法进行自动的垃圾回收，防止内存泄漏。 
-5. 采用合理的数据结构。
+可以采用Mark-Sweep（标记清除算法）、Stop-Copy（停止复制算法）、Reference-Counting（引用计数算法）等算法进行自动的垃圾回收，防止内存泄漏。
+其中前两种算法因为内存使用效率、性能等问题在系统级环境中很少被使用；引用计数则在Linux内核和一些系统级编程语言(如C++、Rust)的特殊数据类型中得到了应用。
+6. 采用合理的数据结构。
 可以设计合理的数据结构，减小程序的内存使用量。
