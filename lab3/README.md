@@ -2354,6 +2354,7 @@ void format() {
 通过valgrind可以检查内存free状况，最终进行修正。
 - 内存初始化问题
 在采用valgrind调试的时候，发现执行初始化的时候valgrind提出警告：
+```shell
 ==96523== Syscall param write(buf) points to uninitialised byte(s)
 ==96523==    at 0x497A887: write (write.c:26)
 ==96523==    by 0x48F0EEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
@@ -2374,6 +2375,7 @@ void format() {
 ==96523==    by 0x10D99A: shell (in /mnt/c/Users/余凯越/Documents/test/lab3/3)
 ==96523==    by 0x10DA93: main (in /mnt/c/Users/余凯越/Documents/test/lab3/3)
 ==96523==
+```
 根据函数调用路径，发现是组描述符中的password的一些字节没有进行初始化。最后在strcpy前对组描述符的password属性进行置零即可。
 
 - write函数不符合预期
